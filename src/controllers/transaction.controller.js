@@ -1,6 +1,6 @@
-const transactionService = require('../services/transaction.service');
+import transactionService from '../services/transaction.service.js';
 
-const { PaymeMethod } = require('../enums/transaction.enum');
+import { PaymeMethod } from '../enums/transaction.enum.js';
 
 async function payme(req, res, next) {
 	try {
@@ -38,4 +38,4 @@ async function payme(req, res, next) {
 	}
 }
 
-module.exports = payme;
+export default payme;

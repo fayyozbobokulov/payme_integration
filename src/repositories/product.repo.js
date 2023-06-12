@@ -1,13 +1,13 @@
-const productModel = require("../models/product.model");
+import productModel from '../models/order.js';
 
 class ProductRepo {
-  constructor(model) {
-    this.model = model;
-  }
+	constructor(model) {
+		this.model = model;
+	}
 
-  async getById(productId) {
-    return this.model.findById(productId);
-  }
+	async getById(productId) {
+		return this.model.findById(productId);
+	}
 }
 
-module.exports = new ProductRepo(productModel);
+export default new ProductRepo(productModel);

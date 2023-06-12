@@ -1,13 +1,13 @@
-const userModel = require("../models/user.model");
+import userModel from '../models/users.js';
 
 class UserRepo {
-  constructor(model) {
-    this.model = model;
-  }
+	constructor(model) {
+		this.model = model;
+	}
 
-  async getById(userId) {
-    return this.model.findById(userId);
-  }
+	async getById(userId) {
+		return this.model.findById(userId);
+	}
 }
 
-module.exports = new UserRepo(userModel);
+export default new UserRepo(userModel);

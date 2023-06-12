@@ -1,25 +1,25 @@
-const transactionModel = require("../models/transaction.model");
+import transactionModel from '../models/transaction.model.js';
 
 class TransactionRepo {
-  constructor(model) {
-    this.model = model;
-  }
+	constructor(model) {
+		this.model = model;
+	}
 
-  async create(data) {
-    await this.model.create(data);
-  }
+	async create(data) {
+		await this.model.create(data);
+	}
 
-  async getById(transactionId) {
-    return this.model.findById(transactionId);
-  }
+	async getById(transactionId) {
+		return this.model.findById(transactionId);
+	}
 
-  async getByFilter(filter) {
-    return this.model.findOne(filter);
-  }
+	async getByFilter(filter) {
+		return this.model.findOne(filter);
+	}
 
-  async updateById(transactionId, update) {
-    return this.model.findByIdAndUpdate(transactionId, update);
-  }
+	async updateById(transactionId, update) {
+		return this.model.findByIdAndUpdate(transactionId, update);
+	}
 }
 
-module.exports = new TransactionRepo(transactionModel);
+export default new TransactionRepo(transactionModel);

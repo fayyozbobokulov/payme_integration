@@ -1,4 +1,4 @@
-module.exports = (error, req, res, next) => {
+export default (error, req, res, next) => {
 	// Responder
 	if (error.isTransactionError) {
 		return res.json({

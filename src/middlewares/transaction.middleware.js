@@ -1,12 +1,12 @@
-const base64 = require('base-64');
+import base64 from 'base-64';
 
-const { PaymeError } = require('../enums/transaction.enum');
+import { PaymeError } from '../enums/transaction.enum.js';
 
-const TransactionError = require('../errors/transaction.error');
+import TransactionError from '../errors/transaction.error.js';
 
 const PAYME_MERCHANT_KEY = process.env.PAYME_MERCHANT_KEY;
 
-exports.paymeCheckToken = (req, res, next) => {
+export const paymeCheckToken = (req, res, next) => {
 	try {
 		const { id } = req.body;
 		const authHeader = req.headers.authorization;

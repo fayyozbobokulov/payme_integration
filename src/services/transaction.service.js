@@ -1,14 +1,14 @@
-const transactionRepo = require('../repositories/transaction.repo');
-const userRepo = require('../repositories/user.repo');
-const productRepo = require('../repositories/product.repo');
+import transactionRepo from '../repositories/transaction.repo.js';
+import userRepo from '../repositories/user.repo.js';
+import productRepo from '../repositories/product.repo.js';
 
-const {
+import {
 	PaymeError,
 	PaymeData,
 	TransactionState,
-} = require('../enums/transaction.enum');
+} from '../enums/transaction.enum.js';
 
-const TransactionError = require('../errors/transaction.error');
+import TransactionError from '../errors/transaction.error.js';
 
 class TransactionService {
 	constructor(repo, userRepo, productRepo) {
@@ -191,4 +191,4 @@ class TransactionService {
 	}
 }
 
-module.exports = new TransactionService(transactionRepo, userRepo, productRepo);
+export default new TransactionService(transactionRepo, userRepo, productRepo);
