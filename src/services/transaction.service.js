@@ -106,7 +106,6 @@ class TransactionService {
 			product_id: account.order_id,
 			create_time: time,
 		});
-		console.log(newTransaction);
 		return {
 			transaction: newTransaction.id,
 			state: TransactionState.Pending,
@@ -133,9 +132,8 @@ class TransactionService {
 				state: TransactionState.Paid,
 			};
 		}
-		console.log(currentTime, transaction.create_time);
 
-		const expirationTime = (currentTime - transaction.create_time) / 600 < 12; // 12m
+		const expirationTime = (currentTime - transaction.create_time) / 60000 > 12; // 12m
 
 		if (!expirationTime) {
 			await this.repo.updateById(params.id, {
@@ -147,14 +145,13 @@ class TransactionService {
 			throw new TransactionError(PaymeError.CantDoOperation, id);
 		}
 
-		await this.repo.updateById(params.id, {
+		const data = await this.repo.updateById(params.id, {
 			state: TransactionState.Paid,
 			perform_time: currentTime,
 		});
-
 		return {
 			perform_time: currentTime,
-			transaction: transaction.id,
+			transaction: data.id,
 			state: TransactionState.Paid,
 		};
 	}
@@ -167,19 +164,21 @@ class TransactionService {
 
 		const currentTime = Date.now();
 
-		if (transaction.state > 0) {
-			await this.repo.updateById(params.id, {
+		if (transaction.state === 1) {
+			const data = await this.repo.updateById(params.id, {
 				state: -Math.abs(transaction.state),
 				reason: params.reason,
 				cancel_time: currentTime,
 			});
-		}
 
-		return {
-			cancel_time: transaction.cancel_time || currentTime,
-			transaction: transaction.id,
-			state: -Math.abs(transaction.state),
-		};
+			return {
+				cancel_time: data.cancel_time || currentTime,
+				transaction: data.id,
+				state: data.state,
+			};
+		} else {
+			throw new TransactionError(PaymeError.CantDoOperation, id);
+		}
 	}
 }
 

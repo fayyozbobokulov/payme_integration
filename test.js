@@ -25,7 +25,7 @@ function chekTime(currentTime, transactionTime) {
 		timenow.getDate() === now.getDate() &&
 		timenow.getHours() === now.getHours()
 	) {
-		console.log(time - current);
+		console.log((1686661243166 - 168642851399345) / 600000 > 12);
 		return current - time < 12;
 	} else {
 		return 10;

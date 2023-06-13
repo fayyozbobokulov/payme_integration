@@ -18,7 +18,16 @@ class TransactionRepo {
 	}
 
 	async updateById(transactionId, update) {
-		return await this.model.findByIdAndUpdate(transactionId, update);
+		const transaction = await this.getById(transactionId);
+		return await this.model.findByIdAndUpdate(
+			{ _id: transaction._id },
+			{
+				$set: {
+					...update,
+				},
+			},
+			{ new: true, useFindAndModify: false }
+		);
 	}
 }
 
