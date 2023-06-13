@@ -6,19 +6,19 @@ class TransactionRepo {
 	}
 
 	async create(data) {
-		await this.model.create(data);
+		return await this.model.create(data);
 	}
 
 	async getById(transactionId) {
-		return this.model.findById(transactionId);
+		return await this.model.findOne({ id: transactionId });
 	}
 
 	async getByFilter(filter) {
-		return this.model.findOne(filter);
+		return await this.model.findOne(filter);
 	}
 
 	async updateById(transactionId, update) {
-		return this.model.findByIdAndUpdate(transactionId, update);
+		return await this.model.findByIdAndUpdate(transactionId, update);
 	}
 }
 

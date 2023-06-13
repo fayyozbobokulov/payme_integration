@@ -18,17 +18,14 @@ class TransactionService {
 	}
 
 	async checkPerformTransaction(params, id) {
-		const { account } = params;
-		let { amount } = params;
+		const { account, amount } = params;
 
-		amount = Math.floor(amount / 100);
-
-		const user = await this.userRepo.getById(account.user_Id);
+		const user = await this.userRepo.getById(account.user_id);
 		if (!user) {
 			throw new TransactionError(PaymeError.UserNotFound, id, PaymeData.UserId);
 		}
 
-		const product = await this.productRepo.getById(account.order_Id);
+		const product = await this.productRepo.getById(account.order_id);
 		if (!product) {
 			throw new TransactionError(
 				PaymeError.ProductNotFound,
@@ -37,7 +34,7 @@ class TransactionService {
 			);
 		}
 
-		if (amount !== product.price) {
+		if (amount !== product.amount) {
 			throw new TransactionError(PaymeError.InvalidAmount, id);
 		}
 	}
@@ -59,13 +56,7 @@ class TransactionService {
 	}
 
 	async createTransaction(params, id) {
-		const {
-			account: { user_id: userId, product_id: productId },
-			time,
-		} = params;
-		let { amount } = params;
-
-		amount = Math.floor(amount / 100);
+		const { account, time, amount } = params;
 
 		await this.checkPerformTransaction(params, id);
 
@@ -97,8 +88,8 @@ class TransactionService {
 		}
 
 		transaction = await this.repo.getByFilter({
-			user_id: userId,
-			product_id: productId,
+			user_id: account.user_id,
+			product_id: account.order_id,
 		});
 		if (transaction) {
 			if (transaction.state === TransactionState.Paid)
@@ -111,11 +102,11 @@ class TransactionService {
 			id: params.id,
 			state: TransactionState.Pending,
 			amount,
-			user_id: userId,
-			product_id: productId,
+			user_id: account.user_id,
+			product_id: account.order_id,
 			create_time: time,
 		});
-
+		console.log(newTransaction);
 		return {
 			transaction: newTransaction.id,
 			state: TransactionState.Pending,
@@ -142,8 +133,9 @@ class TransactionService {
 				state: TransactionState.Paid,
 			};
 		}
+		console.log(currentTime, transaction.create_time);
 
-		const expirationTime = (currentTime - transaction.create_time) / 60000 < 12; // 12m
+		const expirationTime = (currentTime - transaction.create_time) / 600 < 12; // 12m
 
 		if (!expirationTime) {
 			await this.repo.updateById(params.id, {

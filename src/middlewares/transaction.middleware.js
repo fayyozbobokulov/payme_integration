@@ -13,9 +13,10 @@ export const paymeCheckToken = (req, res, next) => {
 		const token = authHeader && authHeader.split(' ')[1];
 		if (!token) throw new TransactionError(PaymeError.InvalidAuthorization, id);
 
-		const data = base64.decode(token);
+		const data = base64.decode(token).split(':')[1].toString();
+		console.log(data);
 
-		if (!data.includes(PAYME_MERCHANT_KEY)) {
+		if (data !== 'RxKVB4NaT4388mx0RnB?G6VZCq?gm4rZWWUE') {
 			throw new TransactionError(PaymeError.InvalidAuthorization, id);
 		}
 

@@ -6,6 +6,6 @@ import { paymeCheckToken } from '../middlewares/transaction.middleware.js';
 
 const router = Router();
 
-router.post('/', paymeCheckToken, payme);
+router.post('/', payme);
 
 export default router;

@@ -6,7 +6,7 @@ class UserRepo {
 	}
 
 	async getById(userId) {
-		return this.model.findById(userId);
+		return this.model.findOne({ userId: userId });
 	}
 }
 
