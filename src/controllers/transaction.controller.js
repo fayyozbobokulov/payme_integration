@@ -32,6 +32,11 @@ async function payme(req, res, next) {
 
 				return res.json({ result, id });
 			}
+			case PaymeMethod.GetStatement: {
+				const result = await transactionService.getStatement(params);
+
+				return res.json({ result });
+			}
 		}
 	} catch (err) {
 		next(err);

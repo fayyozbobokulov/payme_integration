@@ -17,6 +17,14 @@ class TransactionService {
 		this.productRepo = productRepo;
 	}
 
+	timeOut(create_time) {
+		if (create_time) {
+			setTimeout(() => {
+				return false;
+			}, 12000);
+		}
+	}
+
 	async checkPerformTransaction(params, id) {
 		const { account, amount } = params;
 
@@ -76,7 +84,6 @@ class TransactionService {
 					state: TransactionState.PendingCanceled,
 					reason: 4,
 				});
-
 				throw new TransactionError(PaymeError.CantDoOperation, id);
 			}
 
@@ -133,7 +140,7 @@ class TransactionService {
 			};
 		}
 
-		const expirationTime = (currentTime - transaction.create_time) / 60000 > 12; // 12m
+		const expirationTime = (currentTime - transaction.create_time) / 60000 < 12; // 12m
 
 		if (!expirationTime) {
 			await this.repo.updateById(params.id, {
@@ -149,6 +156,7 @@ class TransactionService {
 			state: TransactionState.Paid,
 			perform_time: currentTime,
 		});
+
 		return {
 			perform_time: currentTime,
 			transaction: data.id,
@@ -176,9 +184,30 @@ class TransactionService {
 				transaction: data.id,
 				state: data.state,
 			};
-		} else {
-			throw new TransactionError(PaymeError.CantDoOperation, id);
 		}
+		return {
+			cancel_time: data.cancel_time || currentTime,
+			transaction: data.id,
+			state: data.state,
+		};
+	}
+
+	async getStatement(params) {
+		const { from, to } = params;
+		const transaction = await this.repo.getOll();
+		if (transaction) {
+			const arry = [];
+			transaction.forEach(data => {
+				if (data.create_time <= from && data.create_time <= to) {
+					arry.push(data);
+				}
+			});
+			return arry;
+		}
+
+		// throw new TransactionError(PaymeError.TransactionNotFound, id);
+
+		// throw new TransactionError(PaymeError.CantDoOperation, id);
 	}
 }
 

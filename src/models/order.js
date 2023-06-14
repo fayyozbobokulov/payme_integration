@@ -9,7 +9,10 @@ const orderSchema = new Schema(
 			require: true,
 		},
 		amount: { type: Number, required: true },
-		orderId: { type: String, default: "soskcsc"},
+		orderId: { type: String, default: 'soskcsc' },
+		location: { type: String, required: true, default: '2222.222.22.2222.222' },
+		sendToPayment: { type: Boolean, default: false },
+		status: { type: Boolean, default: false },
 	},
 	{ timestamps: true }
 );

@@ -9,6 +9,10 @@ class TransactionRepo {
 		return await this.model.create(data);
 	}
 
+	async getOll() {
+		return await this.model.find();
+	}
+
 	async getById(transactionId) {
 		return await this.model.findOne({ id: transactionId });
 	}

@@ -93,3 +93,13 @@ export const TransactionState = {
 	PendingCanceled: -1,
 	PaidCanceled: -2,
 };
+
+export const NoAuthorization = {
+	name: 'InvalidAuthorization',
+	code: 401,
+	message: {
+		uz: 'Avtorizatsiya yaroqsiz',
+		ru: 'Авторизация недействительна',
+		en: 'Authorization invalid',
+	},
+};
