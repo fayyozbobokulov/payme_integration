@@ -1,4 +1,6 @@
 import NotionalFoods from '../models/national_foods.js';
+import { uploadFile } from '../services/uploadFile.js';
+
 // Get Method
 export const getNationalFood = async (req, res) => {
 	try {
@@ -34,7 +36,8 @@ export const getByIdNationalFood = async (req, res) => {
 // Post Method
 export const postNotionalFood = async (req, res) => {
 	try {
-		const food = new NotionalFoods({ img: req.file.filename, ...req.body });
+		const fileUrl = await uploadFile(req, res);
+		const food = new NotionalFoods({ img: fileUrl, ...req.body });
 		await food.save();
 		res.status(200).json({ message: 'successfully updatedAt', data: food });
 	} catch (error) {
