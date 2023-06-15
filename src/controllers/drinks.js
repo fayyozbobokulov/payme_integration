@@ -1,5 +1,5 @@
 import Drinks from '../models/drinks.js';
-
+import { uploadManually } from '../services/fileUpload.js';
 // Get Method
 export const getDrinks = async (req, res) => {
 	try {
@@ -34,7 +34,8 @@ export const getByIdDrink = async (req, res) => {
 // Post Method
 export const postDrink = async (req, res) => {
 	try {
-		const drink = new Drinks({ img: req.file.filename, ...req.body });
+		await uploadManually(req, res);
+		const drink = new Drinks({ img: req.file.fileURL, ...req.body });
 		await drink.save();
 		res.status(200).json({ message: 'successfully updatedAt', data: drink });
 	} catch (error) {

@@ -8,7 +8,9 @@ import {
 	deletedDrink,
 } from '../controllers/drinks.js';
 import { verify } from '../middlewares/verfiy.js';
-router.post('/', postDrink);
+import { upload } from '../middlewares/file.js';
+import { fileUpload } from '../controllers/fileupload.js';
+router.post('/', upload.single('file'), fileUpload, postDrink);
 router.put('/update/:id', updateDrink);
 router.get('/', getDrinks);
 router.get('/:id', getByIdDrink);

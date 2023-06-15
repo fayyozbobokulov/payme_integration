@@ -1,4 +1,4 @@
-import productModel from '../models/order.js';
+import productModel from '../models/onlineOrder.js';
 
 class ProductRepo {
 	constructor(model) {
@@ -7,6 +7,10 @@ class ProductRepo {
 
 	async getById(productId) {
 		return this.model.findOne({ orderId: productId });
+	}
+
+	async getByUserId(userID) {
+		return this.model.findOne({ userId: userID });
 	}
 }
 

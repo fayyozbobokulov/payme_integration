@@ -1,4 +1,5 @@
 import transactionService from '../services/transaction.service.js';
+import OnlineOrder from '../repositories/product.repo.js';
 
 import { PaymeMethod } from '../enums/transaction.enum.js';
 
@@ -9,8 +10,12 @@ async function payme(req, res, next) {
 		switch (method) {
 			case PaymeMethod.CheckPerformTransaction: {
 				await transactionService.checkPerformTransaction(params, id);
-
-				return res.json({ result: { allow: true } });
+				const order = await OnlineOrder.getByUserId(req.user.id);
+				return res.json({
+					result: { allow: true },
+					detail: { receipt_type: 0 },
+					items: order.foods,
+				});
 			}
 			case PaymeMethod.CheckTransaction: {
 				const result = await transactionService.checkTransaction(params, id);

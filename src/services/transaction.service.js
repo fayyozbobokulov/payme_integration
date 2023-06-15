@@ -196,18 +196,22 @@ class TransactionService {
 		const { from, to } = params;
 		const transaction = await this.repo.getOll();
 		if (transaction) {
-			const arry = [];
-			transaction.forEach(data => {
-				if (data.create_time <= from && data.create_time <= to) {
-					arry.push(data);
+			const sortTransaction = transaction.sort(
+				(a, b) => new Date(b.create_time) - new Date(a.create_time)
+			);
+			let indexFrom = NaN;
+			let indexTo = NaN;
+			sortTransaction.forEach((a, ind) => {
+				if (a.create_time === from) {
+					indexFrom = ind;
+				} else if (a.create_time === to) {
+					indexTo = ind;
 				}
 			});
-			return arry;
+			const arr = sortTransaction.slice(indexFrom, indexTo + 1);
+			return arr;
 		}
-
-		// throw new TransactionError(PaymeError.TransactionNotFound, id);
-
-		// throw new TransactionError(PaymeError.CantDoOperation, id);
+		throw new TransactionError(PaymeError.TransactionNotFound, id);
 	}
 }
 
